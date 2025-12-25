@@ -46,42 +46,6 @@ class ProductService(private val getConnection: () -> Connection) {
     }
   }
 
-  fun getById(id: String): Product? {
-    val sql = """
-      SELECT p.id, p.name, p.base_price, p.country,
-             d.discount_id, d.percent
-      FROM products p
-      LEFT JOIN product_discounts d ON d.product_id = p.id
-      WHERE p.id = ?
-      ORDER BY p.id
-    """.trimIndent()
-    getConnection().use { connection ->
-      connection.prepareStatement(sql).use { ps ->
-        ps.setString(1, id)
-        ps.executeQuery().use { rs ->
-          var product: Product? = null
-          while (rs.next()) {
-            if (product == null) {
-            product = Product(
-              id = rs.getString("id"),
-              name = rs.getString("name"),
-              basePrice = rs.getDouble("base_price"),
-              country = rs.getString("country"),
-              discounts = mutableListOf()
-            )
-          }
-          val discountId = rs.getString("discount_id")
-          if (discountId != null) {
-            val percent = rs.getDouble("percent")
-            (product!!.discounts as MutableList).add(Discount(discountId, percent))
-          }
-        }
-        return product
-      }
-      }
-    }
-  }
-
   data class ApplyResult(val applied: Boolean, val status: HttpStatusCode)
 
   fun applyDiscount(productId: String, discountId: String, percent: Double): ApplyResult {

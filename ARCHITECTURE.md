@@ -70,7 +70,7 @@ sequenceDiagram
 ```
 
 ### Important notes
-- The schema is created on startup and a few products are seeded if the table is empty.
+- The schema is created on startup, and a few products are seeded if the table is empty.
 - For production, configure PostgreSQL by setting `db.embedded=false` and providing connection settings in `application.yaml`.
 - The concurrency test (`ProductApiTest.applyDiscount_isIdempotent_underConcurrency`) simulates many simultaneous HTTP PUTs against the same product/discount and asserts only one persisted application.
 

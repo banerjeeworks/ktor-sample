@@ -10,6 +10,7 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
+import org.junit.jupiter.api.DisplayName
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -20,6 +21,7 @@ class ProductApiTest {
   private val json = Json { ignoreUnknownKeys = true }
 
   @Test
+  @DisplayName("Get products by country")
   fun getProductsByCountry_returnsSeeded() = testApplication {
     application { module() }
 
@@ -33,6 +35,7 @@ class ProductApiTest {
   }
 
   @Test
+  @DisplayName("Apply discount is idempotent under concurrency")
   fun applyDiscount_isIdempotent_underConcurrency() = testApplication {
     application { module() }
 
