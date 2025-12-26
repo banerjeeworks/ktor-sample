@@ -9,7 +9,7 @@ import io.ktor.util.AttributeKey
 val ProductServiceKey = AttributeKey<ProductService>("ProductService")
 
 fun Application.configureDatabases() {
-  // Keep a single connection for the test assesment. Otherwise, use a Hikari Connection pool.
+  // Keep a single connection for the test assessment. Otherwise, use a Hikari Connection pool.
   val embedded = environment.config.propertyOrNull("db.embedded")?.getString()?.toBooleanStrictOrNull() ?: true
   val dbConnection: Connection = connectToPostgres(embedded)
   environment.monitor.subscribe(ApplicationStopping) {
@@ -19,7 +19,6 @@ fun Application.configureDatabases() {
   }
   // Initialize schema and seed data for products
   ProductSchema.init(dbConnection, log)
-  // Provide ProductService to other modules via Application attributes
   val svc = ProductService { connectToPostgres(embedded) }
   attributes.put(ProductServiceKey, svc)
 }

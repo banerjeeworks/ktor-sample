@@ -3,7 +3,6 @@ package com.example.database
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.sql.Connection
-import kotlin.jvm.java
 
 object ProductSchema {
   private const val CREATE_PRODUCTS =
@@ -33,7 +32,7 @@ object ProductSchema {
       st.executeUpdate(CREATE_PRODUCT_DISCOUNTS)
     }
 
-    // Seed a few products if table is empty
+    // Seed a few products if the table is empty
     val count = connection.createStatement().use { st ->
       st.executeQuery("SELECT COUNT(*) FROM products").use { rs ->
         if (rs.next()) rs.getInt(1) else 0

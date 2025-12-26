@@ -18,7 +18,6 @@ fun Application.configureRouting() {
         call.respond(HttpStatusCode.BadRequest, mapOf("error" to "country is required"))
         return@get
       }
-      // Read ProductService from the Application attributes (not per-call attributes)
       val svc = this@configureRouting.attributes[ProductServiceKey]
       val products = svc.listByCountry(country)
       call.respond(HttpStatusCode.OK, products)
@@ -31,7 +30,6 @@ fun Application.configureRouting() {
         return@put
       }
       val req = call.receive<ApplyDiscountRequest>()
-      // Read ProductService from the Application attributes (not per-call attributes)
       val svc = this@configureRouting.attributes[ProductServiceKey]
       val result = try {
         svc.applyDiscount(id, req.discountId, req.percent)
@@ -39,7 +37,6 @@ fun Application.configureRouting() {
         call.respond(HttpStatusCode.BadRequest, mapOf("error" to e.message))
         return@put
       }
-      // Always OK for idempotency unless product not found
       call.respond(result.status, mapOf("applied" to result.applied))
     }
   }
